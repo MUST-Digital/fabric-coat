@@ -187,8 +187,8 @@ def deploy(revision="master", preprocessor=None):
     with lcd(env.local_base_dir):
         local('git archive %s %s | tar -x -f- -C %s' % (revision, env.local_wordpress_path, deploy_archive_dir))
 
-        if preprocessor:
-            preprocessor()
+    if preprocessor:
+        preprocessor(deploy_archive_dir, revision)
 
     local('rsync -a --exclude wp-config.php --exclude wp-content/uploads/* %s/%s/* %s@%s:%s/%s' %
           (deploy_archive_dir, env.local_wordpress_path, env.user, env.host,
