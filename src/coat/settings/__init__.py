@@ -1,3 +1,5 @@
+from six import string_types
+
 from django.core.exceptions import ValidationError
 
 from fabric.utils import abort, _AttributeDict
@@ -32,7 +34,7 @@ class Settings(_AttributeDict):
                 for key, value in v.items():
                     v[replace(key)] = replace(value)
                 return v
-            elif isinstance(v, basestring):
+            elif isinstance(v, string_types):
                 return v % self
             else:
                 return v
