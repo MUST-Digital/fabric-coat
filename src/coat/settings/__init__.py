@@ -57,9 +57,9 @@ class Settings(_AttributeDict):
                     validator(self[key])
                 except KeyError:
                     missing.append("* %s was not defined" % key)
-                except ValueError, exc:
+                except ValueError as exc:
                     missing.append("* %s caused ValueError(%s)" % (key, exc))
-                except ValidationError, exc:
+                except ValidationError as exc:
                     missing.append("* %s failed validation - %s" % (
                         key, "\n  * ".join(exc.messages)
                     ))
