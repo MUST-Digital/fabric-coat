@@ -29,7 +29,7 @@ class Settings(_AttributeDict):
             if isinstance(v, (tuple, list)):
                 return map(replace, v)
             elif isinstance(v, dict):
-                for key, value in v.iteritems():
+                for key, value in v.items():
                     v[replace(key)] = replace(value)
                 return v
             elif isinstance(v, basestring):
@@ -37,7 +37,7 @@ class Settings(_AttributeDict):
             else:
                 return v
 
-        for key, value in self.iteritems():
+        for key, value in self.items():
             self[key] = replace(value)
 
     def validate_or_abort(self):
@@ -48,7 +48,7 @@ class Settings(_AttributeDict):
         """
         missing = []
 
-        for key, validators in self.required.iteritems():
+        for key, validators in self.required.items():
             if not isinstance(validators, (list, tuple)):
                 validators = (validators, )
 
