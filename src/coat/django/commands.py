@@ -179,7 +179,7 @@ def deploy(revision="master"):
     env.deploy_revision = coat_utils.local_resolve_revision(revision)
 
     env.deploy_workdir = coat_utils.workdir_prepare_checkout(
-        revision, folders=("django", )
+        revision, folders=(env.project_name, )
     )
 
     workdir_django_prepare(env.deploy_workdir)
