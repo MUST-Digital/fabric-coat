@@ -24,6 +24,7 @@ def find_manage(basedir):
     """
     Returns the path to manage.py relative to `basedir`.
     """
+    import ipdb; ipdb.set_trace()
     for root, dirs, files in os.walk(basedir):
         if 'manage.py' in files:
             return os.path.join(root, 'manage.py')

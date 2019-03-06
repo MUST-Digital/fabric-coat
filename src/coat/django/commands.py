@@ -73,7 +73,6 @@ def copy_revision_to_remote(workdir, remote_revision, deploy_revision):
 
 
 def remote_activate_revision(workdir, remote_revision, deploy_revision):
-    import ipdb; ipdb.set_trace()
     remote_virtualenv_dir = "%s/%s" % (
         env.base_dir, env.virtualenv_settings.env_dir
     )
@@ -104,7 +103,6 @@ def remote_activate_revision(workdir, remote_revision, deploy_revision):
         )
 
     # find relative path to manage.py
-    import ipdb; ipdb.set_trace()
     django_manage_path = find_manage(workdir).replace(workdir, "")[1:]
 
     with cd("%s/%s" % (remote_versions_dir, deploy_revision)):
