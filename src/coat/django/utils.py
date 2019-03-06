@@ -34,7 +34,6 @@ def find_settings(basedir):
     """
     Returns the path to settings.py relative to `basedir`.
     """
-    import ipdb; ipdb.set_trace()
     for root, dirs, files in os.walk(basedir):
         if env.django_settings['settings_file'] in files:
             return os.path.join(root, env.django_settings['settings_file'])
