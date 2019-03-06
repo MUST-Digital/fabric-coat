@@ -26,6 +26,7 @@ def workdir_prepare_checkout(revision, folders):
 
     Dispatches signals to pre_workdir_checkout and post_workdir_checkout.
     """
+    import ipdb; ipdb.set_trace()
     dispatcher.send(
         signal=signals.pre_workdir_prepare_checkout,
         sender=workdir_prepare_checkout,
