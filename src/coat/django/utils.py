@@ -1,5 +1,7 @@
 import os
 
+from fabric.state import env
+
 
 def memoize(func):
     cache = {}
@@ -33,8 +35,8 @@ def find_settings(basedir):
     Returns the path to settings.py relative to `basedir`.
     """
     for root, dirs, files in os.walk(basedir):
-        if 'settings.py' in files:
-            return os.path.join(root, 'settings.py')
+        if env.django_settings['settings_file'] in files:
+            return os.path.join(root, env.django_settings['settings_file'])
 
 
 @memoize
