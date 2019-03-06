@@ -37,13 +37,3 @@ def find_settings(basedir):
     for root, dirs, files in os.walk(basedir):
         if env.django_settings['settings_file'] in files:
             return os.path.join(root, env.django_settings['settings_file'])
-
-
-@memoize
-def find_django_appname(basedir):
-    """
-    Returns the django application name.
-    """
-    for root, dirs, files in os.walk(basedir):
-        if 'settings.py' in files:
-            return root.split("/")[-1]
