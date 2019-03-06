@@ -9,7 +9,7 @@ def read(filename):
 
 setup(
     name="fabric-coat",
-    version="0.4.20",
+    version="0.4.21",
     author="Rasmus Schlünsen, Mads Sülau Jørgensen, Martin Kjellberg",
     author_email="rs@konstellation.dk, msj@konstellation.dk, martin@martinkjellberg.com",
     description=("Deployment helpers for fabric3, forked from https://bitbucket.org/madssj/fabric-coat"),

@@ -38,7 +38,8 @@ class DjangoSettings(Settings):
     A settings object for a Django project.
     """
     DEFAULT_MANAGEMENT_COMMANDS = [
-        "syncdb --noinput",
+        "migrate --noinput",
+        "collectstatic --noinput --verbosity 0",
     ]
 
     defaults = {
@@ -47,8 +48,12 @@ class DjangoSettings(Settings):
     }
 
     required = {
+        # 'settings_file': RegexValidator(
+        #     "^localsettings_(\w+)\.py$",
+        #     "localsettings file must be defined and named localsettings_ENV.py"
+        # ),
         'settings_file': RegexValidator(
-            "^localsettings_(\w+)\.py$",
-            "localsettings file must be defined and named localsettings_ENV.py"
+            "^production\.py$",
+            "production settings file must be defined and named production.py"
         ),
     }
