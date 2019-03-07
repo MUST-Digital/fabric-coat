@@ -52,8 +52,8 @@ class DjangoSettings(Settings):
         #     "^localsettings_(\w+)\.py$",
         #     "localsettings file must be defined and named localsettings_ENV.py"
         # ),
-        'settings_file': RegexValidator(
-            "^production\.py$",
-            "production settings file must be defined and named production.py"
-        ),
+        # 'settings_file': RegexValidator(
+        #     "^production\.py$",
+        #     "production settings file must be defined and named production.py"
+        # ),
     }
