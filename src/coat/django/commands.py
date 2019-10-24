@@ -107,7 +107,6 @@ def remote_activate_revision(workdir, remote_revision, deploy_revision):
 
     with cd("%s/%s" % (remote_versions_dir, deploy_revision)):
         with prefix(env.virtualenv_settings.activator.format(dir=remote_virtualenv_dir)):
-            import ipdb; ipdb.set_trace()
             for command in env.virtualenv_settings.commands:
                 run(command)
 
