@@ -104,15 +104,19 @@ def remote_activate_revision(workdir, remote_revision, deploy_revision):
 
     # find relative path to manage.py
     django_manage_path = find_manage(workdir).replace(workdir, "")[1:]
-
-    with cd("%s/%s" % (remote_versions_dir, deploy_revision)):
+    base_path = os.path.join(remote_versions_dir, deploy_revision)
+    django_manage_absolute_path = os.path.join(base_path, django_manage_path)
+    project_path = os.path.join(env.get('project_name', 'django'), env['django_settings']['django_appname'])
+    full_path = os.path.join(base_path, project_path)
+    with cd(full_path):
         with prefix(env.virtualenv_settings.activator.format(dir=remote_virtualenv_dir)):
             for command in env.virtualenv_settings.commands:
                 run(command)
 
         for command in env.django_settings.management_commands:
+            # run("%s/bin/python %s %s" % (
             run("%s/bin/python %s %s" % (
-                remote_virtualenv_dir, django_manage_path, command
+                remote_virtualenv_dir, django_manage_absolute_path, command
             ))
 
     dispatcher.send(
@@ -177,7 +181,6 @@ def deploy(revision="master"):
 
     env.remote_revision = coat_utils.remote_resolve_current_revision()
     env.deploy_revision = coat_utils.local_resolve_revision(revision)
-
     env.deploy_workdir = coat_utils.workdir_prepare_checkout(
         revision, folders=(env.get('project_name', 'django'), )
     )
