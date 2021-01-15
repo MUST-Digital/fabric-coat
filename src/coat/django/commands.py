@@ -15,10 +15,17 @@ from coat.django.utils import find_settings, find_manage
 from coat.django import signals
 
 
-def copy_revision_to_remote(workdir, remote_revision, deploy_revision):
-    remote_versions_dir = coat_utils.remote_absolute_path(
-        env.django_settings.versions_dir
-    )
+def copy_revision_to_remote(workdir, remote_revision, deploy_revision, is_django=True):
+    if is_django:
+        remote_versions_dir = coat_utils.remote_absolute_path(
+            env.django_settings.versions_dir
+        )
+    elif getattr(env, 'node_settings', None):
+        remote_versions_dir = coat_utils.remote_absolute_path(
+            env.node_settings.versions_dir
+        )
+    else:
+        raise NotImplementedError()
 
     if not fabric_files.exists(remote_versions_dir):
         run("mkdir -p %s" % remote_versions_dir)
@@ -72,14 +79,20 @@ def copy_revision_to_remote(workdir, remote_revision, deploy_revision):
     )
 
 
-def remote_activate_revision(workdir, remote_revision, deploy_revision):
+def remote_activate_revision(workdir, remote_revision, deploy_revision, is_django=True):
     remote_virtualenv_dir = "%s/%s" % (
         env.base_dir, env.virtualenv_settings.env_dir
     )
 
-    remote_versions_dir = "%s/%s" % (
-        env.base_dir, env.django_settings.versions_dir
-    )
+    if is_django:
+        remote_versions_dir = "%s/%s" % (
+            env.base_dir, env.django_settings.versions_dir
+        )
+    elif getattr(env, 'node_settings', None):
+        remote_versions_dir = "%s/%s" % (
+            env.base_dir, env.node_settings.versions_dir
+        )
+
 
     dispatcher.send(
         signal=signals.pre_remote_run_commands,
@@ -102,22 +115,28 @@ def remote_activate_revision(workdir, remote_revision, deploy_revision):
             sender=remote_activate_revision,
         )
 
-    # find relative path to manage.py
-    django_manage_path = find_manage(workdir).replace(workdir, "")[1:]
+
     base_path = os.path.join(remote_versions_dir, deploy_revision)
-    django_manage_absolute_path = os.path.join(base_path, django_manage_path)
-    project_path = os.path.join(env.get('project_name', 'django'), env['django_settings']['django_appname'])
+    django_manage_absolute_path = ''
+    if is_django:
+        # find relative path to manage.py
+        django_manage_path = find_manage(workdir).replace(workdir, "")[1:]
+        django_manage_absolute_path = os.path.join(base_path, django_manage_path)
+        project_path = os.path.join(env.get('project_name', 'django'), env['django_settings']['django_appname'])
+    else:
+        project_path = env.get('project_name', 'project')
     full_path = os.path.join(base_path, project_path)
     with cd(full_path):
         with prefix(env.virtualenv_settings.activator.format(dir=remote_virtualenv_dir)):
             for command in env.virtualenv_settings.commands:
                 run(command)
 
-        for command in env.django_settings.management_commands:
-            # run("%s/bin/python %s %s" % (
-            run("%s/bin/python %s %s" % (
-                remote_virtualenv_dir, django_manage_absolute_path, command
-            ))
+        if is_django:
+            for command in env.django_settings.management_commands:
+                # run("%s/bin/python %s %s" % (
+                run("%s/bin/python %s %s" % (
+                    remote_virtualenv_dir, django_manage_absolute_path, command
+                ))
 
     dispatcher.send(
         signal=signals.post_remote_run_commands,

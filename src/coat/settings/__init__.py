@@ -1,7 +1,5 @@
 from six import string_types
 
-from django.core.exceptions import ValidationError
-
 from fabric.utils import abort, _AttributeDict
 
 
@@ -48,6 +46,8 @@ class Settings(_AttributeDict):
 
         Also resolves all values if validation was successful.
         """
+        from django.core.exceptions import ValidationError
+
         missing = []
 
         for key, validators in self.required.items():

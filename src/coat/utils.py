@@ -72,7 +72,7 @@ def remote_absolute_path(path):
     return os.path.join(env.remote_pwd, env.base_dir, path)
 
 
-def remote_resolve_current_revision():
+def remote_resolve_current_revision(is_django=True):
     """
     Returns the locally resolved currently active remote revision.
     """
@@ -82,7 +82,12 @@ def remote_resolve_current_revision():
                   warn_only=True):
 
         # make sure version_dir exists
-        versions_dir = remote_absolute_path(env.django_settings.versions_dir)
+        if is_django:
+            versions_dir = remote_absolute_path(env.django_settings.versions_dir)
+        elif getattr(env, 'node_settings', None):
+            versions_dir = remote_absolute_path(env.node_settings.versions_dir)
+        else:
+            pass
 
         if not fabric_files.exists(versions_dir):
             run("mkdir -p %s" % versions_dir)
