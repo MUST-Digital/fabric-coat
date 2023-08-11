@@ -9,7 +9,7 @@ def read(filename):
 
 setup(
     name="fabric-coat",
-    version="0.4.24",
+    version="0.4.25",
     author="Rasmus Schlünsen, Mads Sülau Jørgensen, Martin Kjellberg",
     author_email="rs@konstellation.dk, msj@konstellation.dk, martin@martinkjellberg.com",
     description=("Deployment helpers for fabric3, forked from https://bitbucket.org/madssj/fabric-coat"),
@@ -19,5 +19,5 @@ setup(
     packages=find_packages('src'),
     long_description=read('README'),
     package_dir={'': 'src'},
-    install_requires=['fabric3', 'pydispatcher'],
+    install_requires=['fabric3 @ git+https://github.com/MUST-Digital/fabric.git', 'pydispatcher'],
 )
